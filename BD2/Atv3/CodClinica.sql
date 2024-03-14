@@ -89,11 +89,18 @@ INSERT INTO Consultas (codm, codp, data, hora) VALUES
 (4, 4, '2006-06-20', '13:00'),
 (4, 4, '2006-06-22', '19:30');
 
+Select * from Ambulatorios;
+Select * from Medicos;
+Select * from Pacientes;
+Select * from Funcionarios;
+Select * from Consultas;
+
 UPDATE Pacientes SET cidade = 'Ilhota' WHERE codp=2;
 UPDATE Consultas SET data='2006-07-04', hora = '12:00' WHERE codm=1 AND codp=4;
 UPDATE Pacientes SET doenca= 'gastrite' WHERE codp=1;
 UPDATE Consultas SET hora= '14:30' WHERE codm=3 AND codp=4;
 DELETE FROM Funcionarios WHERE codf=4;
 DELETE FROM Consultas WHERE hora >= '19:00';
-DELETE FROM Pacientes WHERE doenca='gastrite' OR nasc >= 2014-01-01;
+DELETE FROM Consultas WHERE codp=1;
+DELETE FROM Pacientes WHERE doenca='gastrite' OR nasc >= '2014-01-01';
 DELETE FROM Medicos WHERE cidade = 'Biguaçu' OR cidade = 'Palhoca';
