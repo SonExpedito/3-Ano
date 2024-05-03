@@ -1,6 +1,7 @@
 package com.example.newform.roomdb
 
 import androidx.room.Database
+import androidx.room.RoomDatabase
 
 @Database(
     entities = [Pessoa::class],
@@ -8,7 +9,7 @@ import androidx.room.Database
 )
 
 
-abstract class PessoaDataBase {
+abstract class PessoaDataBase: RoomDatabase() {
     /*abstract =Feita para organização, sendo uma junção de componentes*/
 
     abstract fun pessoaDao(): PessoaDao

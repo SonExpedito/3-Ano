@@ -1,8 +1,10 @@
 package com.example.newform
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,15 +26,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.example.newform.roomdb.Pessoa
 import com.example.newform.roomdb.PessoaDataBase
 import com.example.newform.ui.theme.NewFormTheme
+import com.example.newform.viewModel.PessoaViewModel
+import com.example.newform.viewModel.Repository
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
@@ -41,93 +49,111 @@ class MainActivity : ComponentActivity() {
             PessoaDataBase::class.java,
             "pessoa.db",
 
-        ).build()
+            ).build()
     }
+
+    private val viewModel by viewModels<PessoaViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return PessoaViewModel(Repository(db)) as T
+                }
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Previewapp()
+            App(viewModel)
         }
     }
 }
 
 
 @Composable
-fun App() {
-    var nome by remember {
-        mutableStateOf("")
-    }
-    var telefone by remember {
-        mutableStateOf("")
-    }
-
-    Column(
-        modifier = Modifier.background(Color.Black)
+fun App(viewModel: PessoaViewModel) {
+    NewFormTheme {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        Row(
-            Modifier
-                .background(Color.White)
-                .fillMaxWidth(),
-            Arrangement.Center
-        ) {
-            Text(
-                text = "APP CADASTRO CLIENTE",
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold,
-                fontSize = 30.sp,
-
-                )
-
+        var nome by remember {
+            mutableStateOf("")
+        }
+        var telefone by remember {
+            mutableStateOf("")
         }
 
-        Spacer(modifier = Modifier.size(30.dp))
-        Row(
-            Modifier.fillMaxWidth(),
-            Arrangement.Center
-        ) {
-            TextField(value = nome,
-                onValueChange = { nome = it },
-                label = { Text(text = "Nome:") })
-        }
+        val pessoa = Pessoa(
+            nome,
+            telefone
+        )
 
-        Spacer(modifier = Modifier.size(30.dp))
-        Row(
-            Modifier.fillMaxWidth(),
-            Arrangement.Center
+        Column(
+            modifier = Modifier.background(Color.LightGray)
         ) {
-            TextField(value = telefone,
-                onValueChange = { telefone = it },
-                label = { Text(text = "Telefone:") })
-        }
-        Spacer(modifier = Modifier.size(30.dp))
-        Row(
-            Modifier.fillMaxWidth(),
-            Arrangement.Center
-        ) {
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Cadastrar")
+            Row(
+                Modifier
+                    .background(Color.Transparent)
+                    .fillMaxWidth(),
+                Arrangement.Center
+            ) {
+                Text(
+                    text = "APP CADASTRO CLIENTE",
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+
+                    )
+
             }
+
+            Spacer(modifier = Modifier.size(30.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                Arrangement.Center
+            ) {
+                TextField(value = nome,
+                    onValueChange = { nome = it },
+                    label = { Text(text = "Nome:") })
+            }
+
+            Spacer(modifier = Modifier.size(30.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                Arrangement.Center
+            ) {
+                TextField(value = telefone,
+                    onValueChange = { telefone = it },
+                    label = { Text(text = "Telefone:") })
+            }
+            Spacer(modifier = Modifier.size(30.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                Arrangement.Center
+            ) {
+                Button(onClick = {
+                    viewModel.upsertPessoa(pessoa)
+                }) {
+                    Text(text = "Cadastrar")
+                }
+            }
+
         }
-
     }
-
+    }
 }
 
 
 @Composable
 @Preview
 fun Previewapp() {
-    NewFormTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
 
-            App()
-        }
+
+
 
     }
 
 
-}
+

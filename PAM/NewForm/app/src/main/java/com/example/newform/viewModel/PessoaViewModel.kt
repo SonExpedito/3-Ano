@@ -1,6 +1,7 @@
 package com.example.newform.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.newform.roomdb.Pessoa
 import kotlinx.coroutines.launch
