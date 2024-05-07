@@ -1,5 +1,5 @@
-create database ExercicioBeetweenOrder;
-use ExercicioBeetweenOrder;
+create database AE;
+use AE;
 
 create table Funcionario(
 	Id int Primary Key Identity,
@@ -12,27 +12,18 @@ create table Funcionario(
 );
 
 
-/* INSERT INTO Funcionario (Nome, Email, Salario, Data_Nasc, Cidade, Estado) 
-VALUES 
-('HP', 'harry@gmail.com', 3000.00, '1990-05-15', 'Rio de Janeiro', 'RJ'),
-('Gk', 'goku@outlook.com', 3500.00, '1985-08-20', 'São Paulo', 'SP'),
-('HS', 'homer@gmail.com', 2800.00, '1992-02-10', 'Brasília', 'DF'),
-('Dv', 'vader@outlook.com', 3200.00, '1987-11-25', 'Curitiba', 'PR'),
-('NU', 'naruto@gmail.com', 3100.00, '1983-04-30', 'Salvador', 'BA'),
-('BL', 'buzz@outlook.com', 3300.00, '1995-09-05', 'Fortaleza', 'CE'),
-('BW', 'batman@gmail.com', 3400.00, '1980-12-12', 'Porto Alegre', 'RS'),
-('SH', 'sonic@outlook.com', 2900.00, '1998-07-18', 'Manaus', 'AM'); */
 
 INSERT INTO Funcionario (Nome, Email, Salario, Data_Nasc, Cidade, Estado) 
 VALUES 
-('Harry Potter', 'harry@gmail.com', 3000.00, '1990-05-15', 'Rio de Janeiro', 'RJ'),
-('Goku', 'goku@outlook.com', 3500.00, '1985-08-20', 'São Paulo', 'SP'),
-('Homer Simpson', 'homer@gmail.com', 2800.00, '1992-02-10', 'Brasília', 'DF'),
-('Darth Vader', 'vader@outlook.com', 3200.00, '1987-11-25', 'Curitiba', 'PR'),
-('Naruto Uzumaki', 'naruto@gmail.com', 3100.00, '1983-04-30', 'Salvador', 'BA'),
-('Buzz Lightyear', 'buzz@outlook.com', 3300.00, '1995-09-05', 'Fortaleza', 'CE'),
-('Batman', 'batman@gmail.com', 3400.00, '1980-12-12', 'Porto Alegre', 'RS'),
-('Sonic the Hedgehog', 'sonic@outlook.com', 2900.00, '1998-07-18', 'Manaus', 'AM');
+('João', 'joao1970@gmail.com', 8000.00, '1970-05-20', 'São Paulo', 'SP'),
+('Camila', 'camila@gmail.com', 3000.00, '1985-07-23', 'São Paulo', 'SP'),
+('Marcio', 'marcio@gmail.com', 900.00, '1982-03-15', 'Campinas', 'SP'),
+('Fernanda', 'fernanda@gmail.com', 3500.00, '1987-08-18', 'Rio de Janeiro', 'RJ'),
+('José', 'jose@gmail.com', 2200.00, '1990-09-18', 'Guaxupé', 'MG'),
+('Fabiano', 'fabiano@gmail.com', 6800.00, '1981-01-30', 'Poços de Caldas', 'MG'),
+('Marcos', 'marcos@gmail.com', 3200.00, '1989-02-08', 'Vitória', 'ES');
+
+Select * from Funcionario
 
 Select * from Funcionario where Nome like 'a%' or Nome like 'e%' or Nome like 'i%' or Nome like 'o%' or Nome like 'u%';
 
