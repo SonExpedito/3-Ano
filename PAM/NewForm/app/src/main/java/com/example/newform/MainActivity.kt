@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +15,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,14 +46,14 @@ import com.example.newform.ui.theme.NewFormTheme
 import com.example.newform.viewModel.PessoaViewModel
 import com.example.newform.viewModel.Repository
 
+@Suppress("UNCHECKED_CAST")
 class MainActivity : ComponentActivity() {
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
             PessoaDataBase::class.java,
-            "pessoa.db",
-
-            ).build()
+            "pessoa.db"
+        ).build()
     }
 
     private val viewModel by viewModels<PessoaViewModel>(
@@ -65,95 +69,154 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            App(viewModel)
-        }
-    }
-}
-
-
-@Composable
-fun App(viewModel: PessoaViewModel) {
-    NewFormTheme {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        var nome by remember {
-            mutableStateOf("")
-        }
-        var telefone by remember {
-            mutableStateOf("")
-        }
-
-        val pessoa = Pessoa(
-            nome,
-            telefone
-        )
-
-        Column(
-            modifier = Modifier.background(Color.LightGray)
-        ) {
-            Row(
-                Modifier
-                    .background(Color.Transparent)
-                    .fillMaxWidth(),
-                Arrangement.Center
-            ) {
-                Text(
-                    text = "APP CADASTRO CLIENTE",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-
-                    )
-
-            }
-
-            Spacer(modifier = Modifier.size(30.dp))
-            Row(
-                Modifier.fillMaxWidth(),
-                Arrangement.Center
-            ) {
-                TextField(value = nome,
-                    onValueChange = { nome = it },
-                    label = { Text(text = "Nome:") })
-            }
-
-            Spacer(modifier = Modifier.size(30.dp))
-            Row(
-                Modifier.fillMaxWidth(),
-                Arrangement.Center
-            ) {
-                TextField(value = telefone,
-                    onValueChange = { telefone = it },
-                    label = { Text(text = "Telefone:") })
-            }
-            Spacer(modifier = Modifier.size(30.dp))
-            Row(
-                Modifier.fillMaxWidth(),
-                Arrangement.Center
-            ) {
-                Button(onClick = {
-                    viewModel.upsertPessoa(pessoa)
-                }) {
-                    Text(text = "Cadastrar")
+            NewFormTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    App(viewModel, this)
                 }
             }
-
         }
-    }
     }
 }
 
 
 @Composable
-@Preview
-fun Previewapp() {
+fun App(viewModel: PessoaViewModel, mainActivity: MainActivity) {
+    NewFormTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            var nome by remember {
+                mutableStateOf("")
+            }
+            var telefone by remember {
+                mutableStateOf("")
+            }
 
+            val pessoa = Pessoa(
+                nome,
+                telefone
+            )
 
+            var pessoaList by remember {
+                mutableStateOf(listOf<Pessoa>())
+            }
 
+            viewModel.getPessoa().observe(mainActivity) {
+                pessoaList = it
+            }
 
+            Column(
+                modifier = Modifier.background(Color.LightGray)
+            ) {
+                Row(
+                    Modifier
+                        .background(Color.Transparent)
+                        .fillMaxWidth(),
+                    Arrangement.Center
+                ) {
+                    Text(
+                        text = "APP CADASTRO CLIENTE",
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+
+                        )
+
+                }
+
+                Spacer(modifier = Modifier.size(30.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    Arrangement.Center
+                ) {
+                    TextField(value = nome,
+                        onValueChange = { nome = it },
+                        label = { Text(text = "Nome:") })
+                }
+
+                Spacer(modifier = Modifier.size(30.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    Arrangement.Center
+                ) {
+                    TextField(value = telefone,
+                        onValueChange = { telefone = it },
+                        label = { Text(text = "Telefone:") })
+                }
+                Spacer(modifier = Modifier.size(30.dp))
+                Row(
+                    Modifier.fillMaxWidth(),
+                    Arrangement.Center
+                ) {
+                    Button(onClick = {
+                        viewModel.upsertPessoa(pessoa)
+                        nome = ""
+                        telefone = ""
+                    }) {
+                        Text(text = "Cadastrar")
+                    }
+                }
+                Row(
+                    Modifier
+                        .padding(20.dp)
+                ) { }
+                Row(
+                    Modifier
+                        .fillMaxWidth(),
+                    Arrangement.Center
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth(0.5f)
+                    ) {
+                        Text(text = "Nome")
+                    }
+                    Column(
+                        Modifier
+                            .fillMaxWidth(0.5f)
+                    ) {
+                        Text(text = "Telefone")
+                    }
+                }
+                Divider()
+                LazyColumn {
+                    items(pessoaList) { pessoa ->
+                        Row(
+                            Modifier
+                                .clickable {
+                                    viewModel.deletePessoa(pessoa)
+                                }
+                                .fillMaxWidth(),
+                            Arrangement.Center
+                        ) {
+                            Column(
+                                Modifier
+                                    .fillMaxWidth(0.5f),
+                                Arrangement.Center
+                            ) {
+                                Text(text = pessoa.nome)
+                            }
+                            Column(
+                                Modifier
+                                    .fillMaxWidth(0.5f),
+                                Arrangement.Center
+                            ) {
+                                Text(text = pessoa.telefone)
+                            }
+                        }
+                        Divider()
+                    }
+
+                }
+            }
+        }
     }
+}
 
 
 
