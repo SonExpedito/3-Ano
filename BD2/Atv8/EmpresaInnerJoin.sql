@@ -65,7 +65,7 @@ Select Funcionarios.Nome_Func, Departamentos.NomeDepto, Funcionarios.Funcao
 from Departamentos INNER JOIN Funcionarios 
 ON Departamentos.Codigo_Depto = Funcionarios.Codigo_Depto;
 
-Select Departamentos.NomeDepto , Funcionarios.Nome_func,Funcionarios.Funcao 
+Select Departamentos.NomeDepto , Funcionarios.Nome_func
 from Departamentos  INNER JOIN Funcionarios
 ON Departamentos.Codigo_Depto = Funcionarios.Codigo_Depto 
 WHERE Funcionarios.Funcao like '%Supervisor%';

@@ -76,6 +76,13 @@ INSERT INTO Estacionamento (patio_num, placa, dtEntrada, dtSaida, hsEntrada, hsS
 (3, 'DEF5678', '2024-05-16', '2024-05-18', '10:00:00', '20:00:00');
 
 
+Select * from Cliente;
+Select * from Modelo;
+Select * from Veiculo;
+Select * from Patio;
+Select * from Estacionamento;
+
+/*INNER JOIN*/
 
 Select Veiculo.placa, Cliente.nome 
 From Cliente INNER JOIN Veiculo ON
