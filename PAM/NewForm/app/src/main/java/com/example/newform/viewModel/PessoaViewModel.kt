@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.newform.roomdb.Pessoa
 import kotlinx.coroutines.launch
 
+
+/*Cria a Função que será executada baseada na Tabela*/
 class PessoaViewModel(private val repository: Repository): ViewModel() {
     fun getPessoa() = repository.getAllPessoa().asLiveData(viewModelScope.coroutineContext) /*viewModelScope.coroutineContext = criar coisas na tela*/
 

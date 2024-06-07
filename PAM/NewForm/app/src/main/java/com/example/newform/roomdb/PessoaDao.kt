@@ -6,6 +6,8 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
+
+//*Dao é a configuração dos comandos que interagem diretamente com o Banco*//
 @Dao
 interface PessoaDao {
 

@@ -48,6 +48,8 @@ import com.example.newform.viewModel.Repository
 
 @Suppress("UNCHECKED_CAST")
 class MainActivity : ComponentActivity() {
+
+    /*Serve para Construir o banco*/
     private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
+    /*Cria um objeto da tabela para ser utilizada*/
     private val viewModel by viewModels<PessoaViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
@@ -90,6 +93,7 @@ fun App(viewModel: PessoaViewModel, mainActivity: MainActivity) {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
+            /*Criação das Variáveis*/
             var nome by remember {
                 mutableStateOf("")
             }
@@ -97,11 +101,13 @@ fun App(viewModel: PessoaViewModel, mainActivity: MainActivity) {
                 mutableStateOf("")
             }
 
+            /*Constrói o Array da tabela Pessoa*/
             val pessoa = Pessoa(
                 nome,
                 telefone
             )
 
+            /*Cria a tabela para o select do banco*/
             var pessoaList by remember {
                 mutableStateOf(listOf<Pessoa>())
             }
@@ -154,6 +160,7 @@ fun App(viewModel: PessoaViewModel, mainActivity: MainActivity) {
                     Arrangement.Center
                 ) {
                     Button(onClick = {
+                        /*Cria o Registro e Reseta o Campos*/
                         viewModel.upsertPessoa(pessoa)
                         nome = ""
                         telefone = ""
