@@ -1,79 +1,97 @@
-create database BD_Garagem;
-use Bd_Garagem;
+CREATE DATABASE BDGaragem
+USE BDGaragem
 
-create table Cliente(
-	cpf varchar(14) Primary Key,
-	nome varchar(50) Not Null,
-	nasc date Not Null
+
+Create table Patio(
+	Patio_Num Int,
+	Ender Varchar(60),
+	Capacidade Int,
+	PRIMARY KEY (Patio_Num)
 );
 
-create table Modelo(
-	codmodelo int Primary Key identity,
-	desc_mod varchar (40) Not Null
+Create table Modelo(
+	CodMod Int,
+	Desc_Mod Varchar(50),
+	PRIMARY KEY (CodMod),
 );
 
-create table Veiculo(
-	codMod int,
-	cpf varchar(14),
-	placa varchar(7) Primary Key,
-	cor varchar(15) Not Null,
-	ano date Not Null,
+Create table Cliente(
+	CPF Varchar(14),
+	Nome Varchar(20),
+	Nasc Date,
+	PRIMARY KEY (CPF),
+);
 
-	foreign key (codMod) references Modelo(codmodelo),
-	foreign key (cpf) references Cliente(cpf)
+Create table Veiculo(
+	CPF Varchar(14),
+	CodMod Int,
+	Placa Varchar(8),
+	Cor Varchar(20),
+	Ano Date,
+	PRIMARY KEY (Placa),
+	FOREIGN KEY (CodMod) REFERENCES Modelo,
+	FOREIGN KEY (CPF) REFERENCES Cliente
+);
+
+Create table Estaciona(
+	Cod Int,
+	Patio_Num Int,
+	Placa Varchar(8),
+	DtEntrada Date,
+	DtSaida Date,
+	HsEntrada Time,
+	HsSaida Time,
+	PRIMARY KEY (Cod),
+	FOREIGN KEY (Patio_Num) REFERENCES Patio,
+	FOREIGN KEY (Placa) REFERENCES Veiculo
 );
 
 
-create table Patio(
-	patio_num int Primary Key,
-	ender varchar(40) Not Null,
-	capacidade int Not Null,
-);
-
-create table Estacionamento(
-	cod int Primary Key identity,
-	patio_num int,
-	placa varchar(7),
-	dtEntrada date Not Null,
-	dtSaida date Not Null,
-	hsEntrada time Not Null,
-	hsSaida time Not Null,
-
-
-	foreign key (patio_num) references Patio(patio_num),
-	foreign key (placa) references Veiculo(placa)
-);
+INSERT INTO Patio (Patio_Num, Ender, Capacidade) VALUES
+(1, 'Endereço 1', 50),
+(2, 'Endereço 2', 30),
+(3, 'Endereço 3', 40),
+(4, 'Endereço 4', 25),
+(5, 'Endereço 5', 35)
 
 
 
-INSERT INTO Cliente (cpf, nome, nasc) VALUES 
-('123.456.789-00', 'Jo�o Silva', '1990-05-10'),
-('987.654.321-00', 'Maria Souza', '1985-12-15'),
-('111.222.333-44', 'Carlos Oliveira', '1988-08-20');
+INSERT INTO Modelo (CodMod, Desc_Mod) VALUES
+(1, 'Sedan'),
+(2, 'SUV'),
+(3, 'Hatchback'),
+(4, 'Caminhão'),
+(5, 'Van'),
+(6, 'Esportivo'),
+(7, 'Compacto'),
+(8, 'Utilitário'),
+(9, 'Micro-ônibus'),
+(10, 'Coupé'),
+(11, 'Conversível'),
+(12, 'Semi-reboque'),
+(13, 'Trator'),
+(14, 'Motocicleta')
 
+INSERT INTO Cliente (CPF, Nome, Nasc) VALUES
+('123.456.789-00', 'João', '1990-05-15'),
+('987.654.321-00', 'Maria', '1985-10-20'),
+('111.222.333-44', 'Pedro', '2000-03-25'),
+('555.666.777-88', 'Ana', '1995-08-12'),
+('999.888.777-66', 'Carlos', '1978-11-30')
 
-INSERT INTO Modelo ( desc_mod) VALUES 
-('Sedan'),
-('SUV'),
-('Hatchback');
+INSERT INTO Veiculo (CPF, CodMod, Placa, Cor, Ano) VALUES
+('123.456.789-00', 1, 'ABC-1234', 'Azul', '2018-01-01'),
+('987.654.321-00', 2, 'JJJ-2020', 'Preto', '2020-06-15'),
+('111.222.333-44', 3, 'DEF-9999', 'Vermelho', '2015-12-10'),
+('555.666.777-88', 4, 'GHI-1111', 'Verde', '2019-03-20'),
+('999.888.777-66', 5, 'JEG-1010', 'Prata', '2017-11-05')
 
-
-INSERT INTO Veiculo (codMod, cpf, placa, cor, ano) VALUES 
-('1', '123.456.789-00', 'ABC1234', 'Preto', '2020-01-01'),
-('2', '987.654.321-00', 'XYZ9876', 'Branco', '2019-05-01'),
-('3', '111.222.333-44', 'DEF5678', 'Azul', '2022-03-10');
-
-
-INSERT INTO Patio (patio_num, ender, capacidade) VALUES 
-(1, 'Rua das Flores, 123', 20),
-(2, 'Avenida Principal, 456', 30),
-(3, 'Rua do Com�rcio, 789', 25);
-
-
-INSERT INTO Estacionamento (patio_num, placa, dtEntrada, dtSaida, hsEntrada, hsSaida) VALUES 
-(1, 'ABC1234', '2024-05-15', '2024-05-16', '08:00:00', '18:00:00'),
-(2, 'XYZ9876', '2024-05-14', '2024-05-17', '09:30:00', '19:30:00'),
-(3, 'DEF5678', '2024-05-16', '2024-05-18', '10:00:00', '20:00:00');
+INSERT INTO Estaciona (Cod, Patio_Num, Placa, DtEntrada, HsEntrada, DtSaida) VALUES
+(1, 1, 'ABC-1234', '2024-05-18', '08:00:00', '2024-05-18'),
+(2, 2, 'JJJ-2020', '2024-05-18', '09:30:00', '2024-05-18'),
+(3, 3, 'DEF-9999', '2024-05-18', '10:45:00', '2024-05-18'),
+(4, 4, 'GHI-1111', '2024-05-18', '11:15:00', '2024-05-18'),
+(5, 5, 'JEG-1010', '2024-05-18', '12:00:00', '2024-05-18')
 
 
 Select * from Cliente;
@@ -84,74 +102,88 @@ Select * from Estacionamento;
 
 /*INNER JOIN*/
 
-Select Veiculo.placa, Cliente.nome 
-From Cliente INNER JOIN Veiculo ON
-Cliente.cpf = Veiculo.cpf;
+-- INNER JOIN EX1
+SELECT Patio.Ender, Estaciona.DtEntrada, Estaciona.DtSaida
+FROM Estaciona
+INNER JOIN Patio ON Estaciona.Patio_Num = Patio.Patio_Num
+WHERE Estaciona.Placa = 'JEG-1010';
 
-Select Cliente.cpf, Cliente.nome 
-from Cliente INNER JOIN Veiculo 
-ON Cliente.cpf = Veiculo.cpf WHERE
-Veiculo.placa like 'JJJ-2020';
+-- INNER JOIN EX2
+SELECT Cliente.CPF, Cliente.Nome
+FROM Veiculo
+INNER JOIN Cliente ON Veiculo.CPF = Cliente.CPF
+WHERE Veiculo.Placa = 'JJJ-2020';
 
-Select Veiculo.placa, Veiculo.cor 
-from Veiculo INNER JOIN Estacionamento 
-on Veiculo.placa = Estacionamento.placa
-WHERE Estacionamento.cod = 1;
+-- INNER JOIN EX3
+SELECT Veiculo.Placa, Veiculo.Cor
+FROM Veiculo
+INNER JOIN Estaciona ON Veiculo.Placa = Estaciona.Placa
+WHERE Estaciona.Cod = 1;
 
-Select Veiculo.placa, Veiculo.ano 
-from Veiculo INNER JOIN Estacionamento 
-on Veiculo.placa = Estacionamento.placa
-WHERE Estacionamento.cod = 1;
+-- INNER JOIN EX4
+SELECT Veiculo.Ano, Veiculo.Placa
+FROM Veiculo
+INNER JOIN Estaciona ON Veiculo.Placa = Estaciona.Placa
+WHERE Estaciona.Cod = 1;
 
+-- INNER JOIN EX5
+SELECT Veiculo.Placa, Veiculo.Ano, Modelo.Desc_Mod
+FROM Veiculo
+INNER JOIN Modelo ON Veiculo.CodMod = Modelo.CodMod
+WHERE Veiculo.Ano >= '2000';
 
-Select Veiculo.placa, Veiculo.ano , Modelo.desc_mod
-from Modelo INNER JOIN Veiculo 
-on Modelo.codmodelo = Veiculo.codMod
-WHERE Veiculo.ano >= '2000/01/01';
+-- INNER JOIN EX6
+SELECT Patio.Ender, Estaciona.DtEntrada, Estaciona.DtSaida
+FROM Estaciona
+INNER JOIN Patio ON Estaciona.Patio_Num = Patio.Patio_Num
+WHERE Estaciona.Placa = 'JEG-1010';
 
+-- INNER JOIN EX7
+SELECT COUNT(*)
+FROM Estaciona
+INNER JOIN Veiculo ON Estaciona.Placa = Veiculo.Placa
+WHERE Veiculo.Cor = 'Verde';
 
-Select Patio.ender, Estacionamento.dtEntrada, Estacionamento.dtSaida 
-from Patio INNER JOIN Estacionamento 
-ON Patio.patio_num = Estacionamento.patio_num 
-INNER JOIN Veiculo ON Estacionamento.placa = Veiculo.placa WHERE
-Veiculo.placa like 'JJJ-2020';
+-- INNER JOIN EX8
+SELECT Cliente.*
+FROM Cliente
+INNER JOIN Veiculo ON Cliente.CPF = Veiculo.CPF
+WHERE Veiculo.CodMod = 1;
 
+-- INNER JOIN EX9
+SELECT Estaciona.Placa, Estaciona.HsEntrada, Estaciona.HsSaida
+FROM Estaciona
+INNER JOIN Veiculo ON Estaciona.Placa = Veiculo.Placa
+WHERE Veiculo.Cor = 'Verde';
 
-Select count(dtEntrada) from Estacionamento 
-INNER JOIN Veiculo ON Estacionamento.placa = Veiculo.placa WHERE
-Veiculo.cor = 'verde';
+-- INNER JOIN EX10
+SELECT *
+FROM Estaciona
+WHERE Placa = 'JJJ-2020';
 
+-- INNER JOIN EX11
+SELECT Cliente.Nome
+FROM Cliente
+INNER JOIN Veiculo ON Cliente.CPF = Veiculo.CPF
+INNER JOIN Estaciona ON Veiculo.Placa = Estaciona.Placa
+WHERE Estaciona.Cod = 2;
 
-Select * from Cliente INNER JOIN Veiculo ON
-Cliente.cpf = Veiculo.cpf WHERE Veiculo.codMod = 1;
+-- INNER JOIN EX12
+SELECT Cliente.CPF
+FROM Cliente
+INNER JOIN Veiculo ON Cliente.CPF = Veiculo.CPF
+INNER JOIN Estaciona ON Veiculo.Placa = Estaciona.Placa
+WHERE Estaciona.Cod = 3;
 
+-- INNER JOIN EX13
+SELECT Modelo.Desc_Mod
+FROM Modelo
+INNER JOIN Veiculo ON Modelo.CodMod = Veiculo.CodMod
+INNER JOIN Estaciona ON Veiculo.Placa = Estaciona.Placa
+WHERE Estaciona.Cod = 2;
 
-Select  Estacionamento.placa, Estacionamento.hsEntrada, Estacionamento.hsSaida 
-from Estacionamento INNER JOIN Veiculo 
-ON Estacionamento.placa = Veiculo.placa WHERE
-Veiculo.cor like 'Verde';
-
-Select * from Estacionamento INNER JOIN Veiculo
-ON Estacionamento.placa = Veiculo.placa WHERE
-Veiculo.placa like 'JJJ-2020';
-
-Select Cliente.nome from Cliente INNER JOIN Veiculo ON
-Cliente.cpf = Veiculo.cpf INNER JOIN Estacionamento ON
-Veiculo.placa = Estacionamento.placa 
-WHERE Estacionamento.cod = 2;
-
-Select Cliente.cpf from Cliente INNER JOIN Veiculo ON
-Cliente.cpf = Veiculo.cpf INNER JOIN Estacionamento ON
-Veiculo.placa = Estacionamento.placa 
-WHERE Estacionamento.cod = 3;
-
-
-Select Modelo.desc_mod from Modelo INNER JOIN Veiculo ON
-Modelo.codmodelo = Veiculo.codMod INNER JOIN Estacionamento 
-ON Veiculo.placa = Estacionamento.placa WHERE Estacionamento.cod = 2;
-
-
-Select Veiculo.placa, Cliente.nome, Modelo.desc_mod from Cliente INNER JOIN
-Veiculo ON Cliente.cpf = Veiculo.cpf 
-INNER JOIN Modelo ON Modelo.codmodelo = Veiculo.codMod ;
-
+-- INNER JOIN EX14
+SELECT Veiculo.Placa, Cliente.Nome, Modelo.Desc_Mod
+FROM Veiculo
+INNER JOIN Cliente ON Veiculo.CPF = Cliente.CPF
+INNER JOIN Modelo ON Veiculo.CodMod = Modelo.CodMod;
