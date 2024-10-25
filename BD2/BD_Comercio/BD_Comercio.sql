@@ -114,8 +114,8 @@ INSERT INTO TBL_Clientes (nome_cliente, cod_estadocivil, salario) VALUES
 ('Chris Evans', 3, 11000.00),
 ('Jennifer Lawrence', 4, 13000.00),
 ('Ryan Reynolds', 5, 14000.00),
-('Emma Watson', 2, 10500.00),
-('Tom Hanks', 4, 15000.00),
+('Rener', 2, 10500.00),
+('Daniel', 4, 15000.00),
 ('Natalie Portman', 5, 11500.00);
 
 INSERT INTO TBL_Conjuge (nome_conjuge, cod_cliente) VALUES 
@@ -151,8 +151,8 @@ INSERT INTO TBL_Telefone (cod_cliente, cod_fone, numero_fone) VALUES
 /*Funcionário*/
 
 INSERT INTO TBL_Func (nome_func) VALUES 
-('João Pereira'),
-('Maria Oliveira'),
+('Francisco'),
+('Roseane'),
 ('Pedro Costa'),
 ('Ana Martins'),
 ('Ricardo Lima'),
@@ -197,7 +197,7 @@ INSERT INTO TBL_Produto (nome_produto, tipo_produto) VALUES
 ('iPhone', 'Eletrônicos'),
 ('PlayStation 5', 'Eletrônicos'),
 ('Nutella', 'Alimentos'),
-('Nescafé', 'Bebidas'),
+('Fosforo', 'Acendedor'),
 ('AirPods', 'Eletrônicos'),
 ('Oreo', 'Snacks');
 
@@ -226,21 +226,24 @@ from TBL_Clientes
 inner join TBL_Telefone on TBL_Clientes.cod_cliente = TBL_Telefone.cod_cliente
 Inner join TBL_Tipo_Fone on TBL_Telefone.cod_fone = TBL_Tipo_Fone.cod_fone
 
-
 Select TBL_Clientes.nome_cliente, TBL_Func.nome_func, TBL_Pedido.*
 from TBL_Clientes 
 inner join TBL_Pedido on TBL_Clientes.cod_cliente = TBL_Pedido.cod_cliente
 inner join TBL_Func on TBL_Pedido.cod_func = TBL_Func.cod_func
 
-select TBL_Pedido.cod_pedido, TBL_Pedido.data_pedido , TBL_Clientes.nome_cliente
-from TBL_Pedido 
-inner join TBL_Clientes on TBL_Pedido.cod_cliente = TBL_Clientes.cod_cliente
-where TBL_Pedido.cod_func = 2
+SELECT TBL_Pedido.cod_pedido, TBL_Pedido.data_pedido, TBL_Clientes.nome_cliente
+FROM TBL_Pedido
+INNER JOIN TBL_Clientes ON TBL_Pedido.cod_cliente = TBL_Clientes.cod_cliente
+INNER JOIN TBL_Func ON TBL_Pedido.cod_func = TBL_Func.cod_func
+WHERE TBL_Func.nome_func = 'Francisco';
 
-select TBL_Pedido.cod_pedido, TBL_Pedido.data_pedido , TBL_Func.nome_func
-from TBL_Pedido 
-inner join TBL_Func on TBL_Pedido.cod_func = TBL_Func.cod_func
-where TBL_Pedido.cod_cliente = 4
+
+SELECT TBL_Pedido.cod_pedido, TBL_Pedido.data_pedido, TBL_Func.nome_func
+FROM TBL_Pedido
+INNER JOIN TBL_Func ON TBL_Pedido.cod_func = TBL_Func.cod_func
+INNER JOIN TBL_Clientes ON TBL_Pedido.cod_cliente = TBL_Clientes.cod_cliente
+WHERE TBL_Clientes.nome_cliente = 'Rener';
+
 
 /*Parte 2*/
 select TBL_Func.nome_func, TBL_Dependente.nome_dep, TBL_Dependente.data_nasc
@@ -257,21 +260,21 @@ from TBL_Func
 inner join TBL_Pedido on TBL_Func.cod_func = TBL_Pedido.cod_func
 inner join TBL_Item_Pedido on TBL_Pedido.cod_pedido = TBL_Item_Pedido.cod_pedido
 inner join TBL_Produto on TBL_Item_Pedido.cod_produto = TBL_Produto.cod_produto
-where nome_produto like 'Nutella'
+where nome_produto like 'Fosforo'
 
 select TBL_Pedido.cod_pedido , TBL_Pedido.data_pedido , TBL_Produto.nome_produto
 from TBL_Clientes 
 inner join TBL_Pedido on TBL_Clientes.cod_cliente = TBL_Pedido.cod_cliente
 inner join TBL_Item_Pedido on TBL_Pedido.cod_pedido = TBL_Item_Pedido.cod_pedido
 inner join TBL_Produto on TBL_Item_Pedido.cod_produto = TBL_Produto.cod_produto
-where nome_cliente like 'Chris Evans'
+where nome_cliente like 'Daniel'
 
 
 select TBL_Produto.nome_produto 
 from TBL_Produto 
 inner join TBL_Pedido on TBL_Produto.cod_produto = TBL_Pedido.cod_pedido
 inner join TBL_Func on TBL_Pedido.cod_func = TBL_Func.cod_func
-where nome_func like 'Maria Oliveira'
+where nome_func like 'Roseane'
 
 select TBL_Clientes.nome_cliente , TBL_Produto.nome_produto from
 TBL_Clientes 
@@ -284,3 +287,45 @@ TBL_Func
 inner join TBL_Pedido on TBL_Func.cod_func = TBL_Pedido.cod_func
 inner join TBL_Item_Pedido on TBL_Pedido.cod_pedido = TBL_Item_Pedido.cod_pedido
 inner join TBL_Produto on TBL_Item_Pedido.cod_produto = TBL_Produto.cod_produto
+
+/*Parte 3*/
+select TBL_Func.nome_func,  sum(TBL_Premio.valor_premio) as total_acumulado
+from TBL_Func 
+inner join TBL_Premio on TBL_Func.cod_func = TBL_Premio.cod_func
+group by TBL_Func.nome_func
+
+select TBL_Func.nome_func,  count(TBL_Dependente.cod_dep) as total_dependentes
+from TBL_Func 
+inner join TBL_Dependente on TBL_Func.cod_func = TBL_Dependente.cod_func
+group by TBL_Func.nome_func
+
+select TBL_Estado_Civil.desc_est_civ, count(TBL_Clientes.cod_cliente) as total_clientes
+from TBL_Clientes
+inner join TBL_Estado_Civil on TBL_Clientes.cod_estadocivil = TBL_Estado_Civil.cod_est_civ
+where TBL_Estado_Civil.desc_est_civ in ('Solteiro', 'Casado', 'Separado')
+group by TBL_Estado_Civil.desc_est_civ;
+
+
+select * from TBL_Clientes 
+inner join TBL_Telefone on TBL_Clientes.cod_cliente = TBL_Telefone.cod_cliente
+where TBL_Telefone.cod_cliente is null
+
+select * from TBL_Clientes
+inner join TBL_Estado_Civil on TBL_Clientes.cod_estadocivil = TBL_Estado_Civil.cod_est_civ
+where TBL_Clientes.cod_estadocivil = 1
+
+select * from TBL_Clientes
+inner join TBL_Estado_Civil on TBL_Clientes.cod_estadocivil = TBL_Estado_Civil.cod_est_civ
+where TBL_Clientes.cod_estadocivil = 2
+
+select * from TBL_Func
+inner join TBL_Premio on TBL_Func.cod_func = TBL_Premio.cod_func
+where TBL_Premio.cod_func is null
+
+select * from TBL_Func
+inner join TBL_Dependente on TBL_Func.cod_func = TBL_Dependente.cod_func
+where TBL_Dependente.cod_func is null
+
+select * from TBL_Produto
+inner join TBL_Item_Pedido on TBL_Produto.cod_produto = TBL_Item_Pedido.cod_produto
+where TBL_Item_Pedido.cod_produto is null
